@@ -80,8 +80,9 @@ def get_cgpa_by_depression(con):
     """
     Retourne la moyenne du CGPA selon la dépression.
     """
+    # CORRECTION ICI : Utilisation du nom exact de la colonne "What is your CGPA?"
     query = """
-        SELECT UPPER("Do you have Depression?") as depression, AVG("CGPA") as avg_cgpa
+        SELECT UPPER("Do you have Depression?") as depression, AVG("What is your CGPA?") as avg_cgpa
         FROM mental_health
         GROUP BY UPPER("Do you have Depression?")
     """
