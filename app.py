@@ -117,13 +117,14 @@ if uploaded_file:
         st.subheader("📈 Répartition des réponses à 'Souffrez-vous de dépression ?'")
         df_depression = get_depression_distribution(con)
         if not df_depression.empty:
-            fig1 = px.bar(
-                df_depression, x='depression', y='percentage',
-                text=df_depression['percentage'].astype(str) + '%',
+            fig1 = px.pie( # C'était déjà un camembert ici, comme demandé précédemment
+                df_depression,
+                names='depression',
+                values='nb',
                 color='depression',
-                labels={'depression': 'Réponse', 'percentage': 'Pourcentage'},
-                title='Répartition des étudiants déclarant une dépression'
+                title='Répartition des étudiants déclarant une dépression (Oui/Non)'
             )
+            fig1.update_traces(textinfo='percent+label')
             st.plotly_chart(fig1, use_container_width=True)
         else:
             st.info("Aucune donnée pour la répartition de la dépression avec les filtres actuels.")
@@ -132,18 +133,44 @@ if uploaded_file:
         st.subheader("🚻 Répartition Dépression par Genre")
         df_gender_dep = get_gender_depression_distribution(con)
         if not df_gender_dep.empty:
-            fig_gender_dep = px.bar(
-                df_gender_dep,
-                x='gender',
-                y='nb',
-                color='depression_status',
-                barmode='group',
-                labels={'gender': 'Genre', 'nb': 'Nombre d\'étudiants', 'depression_status': 'Dépression'},
-                title='Nombre d\'étudiants par genre et statut de dépression'
-            )
-            st.plotly_chart(fig_gender_dep, use_container_width=True)
+            # Pour un camembert, nous devons calculer les pourcentages par genre et statut de dépression
+            # et choisir une seule colonne pour les 'names' et une pour les 'values'.
+            # Pour un camembert par genre, il faut d'abord agréger les données
+            # pour obtenir le total de chaque genre.
+            # Cependant, le KPI 3 est "Répartition par genre du Yes/No de dépression",
+            # ce qui suggère de voir la proportion de Yes/No au sein de chaque genre, ou la proportion de chaque genre
+            # parmi les dépressifs/non-dépressifs. Un graphique à barres groupées est souvent plus clair ici.
+            # Si vous voulez un camembert pour chaque genre (un camembert pour les hommes, un pour les femmes),
+            # ce serait plus complexe et nécessiterait des sous-graphiques ou des filtres supplémentaires.
+            #
+            # Pour un camembert simple sur la répartition des genres parmi les dépressifs (ce qui était un KPI précédent),
+            # il faudrait filtrer df_gender_dep pour 'YES' et ensuite faire le camembert.
+            #
+            # Pour ce KPI spécifique ("Répartition par genre du Yes/No de dépression"),
+            # un camembert n'est pas idéal car il y a deux dimensions (genre ET statut de dépression).
+            # Un bar chart groupé est plus approprié pour montrer les deux dimensions.
+            #
+            # Si l'intention est de montrer la *proportion de chaque genre* parmi les dépressifs,
+            # alors il faut une agrégation spécifique :
+            df_depressed_gender = df_gender_dep[df_gender_dep['depression_status'].str.upper() == 'YES'].copy()
+            if not df_depressed_gender.empty and df_depressed_gender['nb'].sum() > 0:
+                total_depressed_gender = df_depressed_gender['nb'].sum()
+                df_depressed_gender['percentage'] = (df_depressed_gender['nb'] / total_depressed_gender * 100).round(1)
+
+                fig_gender_pie = px.pie( # CHANGÉ ICI : de px.bar à px.pie
+                    df_depressed_gender,
+                    names='gender',
+                    values='percentage',
+                    color='gender',
+                    title='Répartition par genre des étudiants déclarant une dépression'
+                )
+                fig_gender_pie.update_traces(textinfo='percent+label')
+                st.plotly_chart(fig_gender_pie, use_container_width=True)
+            else:
+                st.info("Aucune donnée disponible pour la répartition par genre des étudiants en dépression avec les filtres actuels.")
         else:
             st.info("Aucune donnée disponible pour ce KPI avec les filtres actuels.")
+
 
         # --- KPI 4 : Répartition du nombre de dépressifs par type d'étude (cours) ---
         st.subheader("🎓 Nombre d'étudiants dépressifs par cours")
