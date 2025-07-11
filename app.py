@@ -22,43 +22,7 @@ if uploaded_file:
         st.error("Impossible de lire le fichier CSV. Veuillez vérifier son format.")
         st.stop()
 
-    # --- Vérification et conversion de la colonne CGPA (si elle existe et est nécessaire) ---
-    # Cette section est commentée car le CGPA n'est plus un KPI direct.
-    # Si vous ajoutez un KPI qui utilise CGPA, vous devrez la réactiver et l'adapter.
-    # if "What is your CGPA?" in df.columns:
-    #     def convert_cgpa_range_to_midpoint(cgpa_range_str):
-    #         if pd.isna(cgpa_range_str):
-    #             return None
-    #         try:
-    #             s_cgpa_range_str = str(cgpa_range_str)
-    #             if ' - ' in s_cgpa_range_str:
-    #                 parts = s_cgpa_range_str.split(' - ')
-    #             elif '-' in s_cgpa_range_str:
-    #                 parts = s_cgpa_range_str.split('-')
-    #             else:
-    #                 return float(s_cgpa_range_str)
-    #             if len(parts) == 2:
-    #                 lower = float(parts[0].strip())
-    #                 upper = float(parts[1].strip())
-    #                 return (lower + upper) / 2
-    #             else:
-    #                 return float(s_cgpa_range_str)
-    #         except ValueError:
-    #             return None
-    #         except Exception as e:
-    #             print(f"Erreur inattendue lors de la conversion de CGPA '{cgpa_range_str}': {e}")
-    #             return None
-    #     
-    #     df["What is your CGPA?"] = df["What is your CGPA?"].apply(convert_cgpa_range_to_midpoint)
-    #     df.dropna(subset=["What is your CGPA?"], inplace=True)
-    #     if df.empty:
-    #         st.warning("Aucune donnée valide après la conversion du CGPA. Veuillez vérifier le format de la colonne ou les filtres.")
-    #         st.stop()
-    # else:
-    #     st.warning("La colonne 'What is your CGPA?' est introuvable. Certains KPIs pourraient être affectés.")
-    # --- Fin de la section CGPA ---
-
-
+    
     st.subheader("Aperçu des données")
     st.write(df.head())
 
