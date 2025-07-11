@@ -16,7 +16,7 @@ Gestion des données avec DuckDB.
 
 Visualisations interactives. Affichage de quatre indicateurs clés de performance (KPI) à travers des graphiques Plotly Express.
 
-Filtres dynamiques, avec la possibilité de filtrer les données en temps réel (tranche d'âge, genre, cours suivi,statut de dépression)
+Filtres dynamiques, avec la possibilité de filtrer les données en temps réel (tranche d'âge, genre, cours suivi, statut de dépression)
 
 
 Indicateurs Clés de Performance (KPIs)
@@ -39,29 +39,39 @@ Installation et Exécution
 Pour faire fonctionner l'application localement, suivez ces étapes :
 
 Cloner le dépôt :
+
 Ouvrez votre terminal (par exemple, le terminal intégré de VS Code) et naviguez vers le dossier où vous souhaitez stocker le projet (par exemple, C:\Users\VotreNom\MesProjets). Ensuite, clonez le dépôt :
 
 A titre d'exemple, de mon coté j'ai donc:
 
 cd "C:\Users\gayou\OneDrive\Desktop\MBA ESG\Github" # Adaptez à votre chemin parent
+
 git clone "https://github.com/cilairg/student_mental_health_perf"
+
 cd student_mental_health_perf
 
 Ouvrir le projet dans VS Code :
+
 Dans VS Code, allez dans File > Open Folder... et sélectionnez le dossier student_mental_health_perf que vous venez de cloner.
 
 Créer et activer l'environnement virtuel :
+
 Ouvrez le terminal intégré de VS Code (Terminal > New Terminal) et exécutez :
 
 Pour Windows:
+
 python -m venv .venv #création de l'environnement virtuel
+
 .venv\Scripts\activate #pour y acceder une fois créé
 
 Pour macOS/Linux:
+
 python3 -m venv .venv #là on crée l'environnement
+
 .venv/bin/activate #et ici cest pour pouvoir l'acceder et l'utiliser une fois créé
 
 Installer les dépendances :
+
 Avec l'environnement virtuel activé, installez les bibliothèques Python requises :
 
 pip install streamlit pandas duckdb plotly
@@ -78,7 +88,8 @@ Le jeu de données utilisé pour ce projet peut être téléchargé depuis Kaggl
 https://www.kaggle.com/datasets/shariful07/student-mental-health?select=Student+Mental+health.csv
 Téléchargez le fichier Student Mental health.csv et téléversez-le via l'interface de l'application Streamlit.
 
-Répartition des Tâches 
+Répartition des Tâches
+
 [SALET Marc] : Développement de l'interface utilisateur Streamlit (app.py), intégration des filtres.
 
 [CONE-BOVIS Sarah] : Implémentation des requêtes DuckDB (outils.py), calcul des KPIs.
